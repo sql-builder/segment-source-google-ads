@@ -2,16 +2,18 @@ const google = require("../");
 
 google({
     //
-    Define the database and schema of your Google data
-    databaseName: "database_name",
-    schemaName: "schema_name",
+    // Define the database and schema of your Google data
+    sourceDatabaseName: "raw",
+    sourceSchemaName: "google_ads",
+
     // Optional prefix metadata if applicable
     stagingTablePrefix: "stg_",
-    // Define the destination schema and table/view
     defaultConfig: {
-        database: "database_name",
-        schema: "schema_name",
-        tags: ["google"],
+        //
+        // Define the destination schema and table/view 
+        database: "databaseName",
+        schema: "segment_google_ads_source",
+        tags: ["google ads", "source", "segment"],
         type: "table"
     },
 });

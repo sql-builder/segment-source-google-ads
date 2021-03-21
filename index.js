@@ -1,56 +1,65 @@
-const googleAds = require("./includes/segment_google_ads");
-const googleAdsets = require("./includes/segment_google_ad_groups");
-const googleCampaigns = require("./includes/segment_google_campaigns");
-const googleAdPerformance = require("./includes/segment_google_ad_performance");
+const segmentGoogleAds = require("./includes/segment_google_ads");
+const segmentGoogleAdsets = require("./includes/segment_google_ad_groups");
+const segmentGoogleCampaigns = require("./includes/segment_google_campaigns");
+const segmentGoogleAdPerformance = require("./includes/segment_google_ad_performance");
 
+    
 module.exports = (params) => {
 
     params = {
         // set defaults for parameters
-        databaseName: "",
-        schemaName: "",
-        tablePrefix: "",
-        stagingTablePrefix: "",
-        stagingSchema: "",
+        sourceDatabaseName: "source",
+        sourceSchemaName: "google_ads",
+        stagingTablePrefix: "stg_",
+        database: "source",
+        schema: "segment_google_ads_source",
+        tags: ["google ads", "source", "segment"],
+        type: "table",
         ...params
     };
 
-    let segmentGoogleAds, segmentGoogleAdsets, segmentGoogleCampaigns, segmentGoogleAdPerformance;
+    const{ 
+        defaultConfig,
+        sourceDatabaseName,
+        sourceSchemaName,
+        stagingTablePrefix,
+    } = params;
 
-    segmentGoogleAds = declare({
+    let ads, adGroups, campaigns, adPerformance;
+
+    ads = declare({
         ...params.defaultConfig,
-        database: params.databaseName,
-        schema: params.schemaName,
+        database: params.sourceDatabaseName,
+        schema: params.sourceSchemaName,
         name: "ads"
     });
 
-    segmentGoogleAdsets = declare({
+    adGroups = declare({
         ...params.defaultConfig,
-        database: params.databaseName,
-        schema: params.schemaName,
+        database: params.sourceDatabaseName,
+        schema: params.sourceSchemaName,
         name: "ad_groups"
     });
 
-    segmentGoogleCampaigns = declare({
+    campaigns = declare({
         ...params.defaultConfig,
-        database: params.databaseName,
-        schema: params.schemaName,
+        database: params.sourceDatabaseName,
+        schema: params.sourceSchemaName,
         name: "campaigns"
     });
 
-    segmentGoogleAdPerformance = declare({
-        ...params.defaultConfig,
-        database: params.databaseName,
-        schema: params.schemaName,
+    adPerformance = declare({
+        ...params.defaultConfig, database: params.sourceDatabaseName,
+        schema: params.sourceSchemaName,
         name: "ad_performance_reports"
     });
 
     // Publish and return datasets.
     let result = {
-        segmentGoogleAds: googleAds(params),
-        segmentGoogleAdsets: googleAdsets(params),
-        segmentGoogleCampaigns: googleCampaigns(params),
-        segmentGoogleAdPerformance: googleAdPerformance(params)
+        ads: segmentGoogleAds(params),
+        adGroups: segmentGoogleAdsets(params),
+        campaigns: segmentGoogleCampaigns(params),
+        adPerformance: segmentGoogleAdPerformance(params)
     };
 
     return result;

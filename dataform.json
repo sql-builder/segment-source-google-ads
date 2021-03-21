@@ -1,6 +1,6 @@
 {
     "warehouse": "snowflake",
-    "defaultSchema": "google_ads",
     "defaultDatabase": "raw",
-    "assertionSchema": "dataform_assertions"
+    "defaultSchema": "segment_google_ads_source",
+    "assertionSchema": "test_assertions"
 }

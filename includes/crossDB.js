@@ -1,9 +1,16 @@
-/* 
- * The function countryGroup() takes as input the name of the country code field and returns a CASE statement that maps country codes to country groups
- * You can learn more about functions on https://docs.dataform.co/guides/includes
- */
-
 const sql = require("@dataform/sql")();
+const { getUrlHost, getUrlParameter } = require("includes/webFunctions/urlClean");
+const { platform, browser } = require("includes/webFunctions/userAgent");
+
+function splitPart(string_text, delimiter_text, part_number, warehouse) {
+  return ({
+    bigquery: `split(${string_text},${delimiter_text})[safe_offset(${part_number - 1})]`,
+    redshift: `split_part(${string_text},${delimiter_text},${part_number})`,
+    postgres: `split_part(${string_text},${delimiter_text},${part_number})`,
+    snowflake: `split_part(${string_text},${delimiter_text},${part_number})`,
+    sqldatawarehouse: `split_part(${string_text},${delimiter_text},${part_number})`,
+  })[warehouse || dataform.projectConfig.warehouse];
+};
 
 function typeString(warehouse) {
   return ({
@@ -14,6 +21,7 @@ function typeString(warehouse) {
     sqldatawarehouse: "string",
   })[warehouse || dataform.projectConfig.warehouse];
 };
+
 function countryGroup(countryCodeField) {
   return `case
             when lower(${countryCodeField}) in ('united states', 'canada') then 'NA'
@@ -33,7 +41,7 @@ SELECT
       *,
       MAX(_sdc_batched_at) OVER (PARTITION BY ${uniqueColumn} ORDER BY _sdc_batched_at RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS max_sdc_batched_at
     FROM
-      ${ctx.ref({ database: params.defaultConfig.databaseName, schema: params.defaultConfig.schemaName, name: `${tableName}` })}
+      ${ctx.ref({ database: params.sourceDatabaseName, schema: params.sourceSchemaName, name: `${tableName}` })}
   )
 WHERE
 _sdc_batched_at = max_sdc_batched_at
@@ -50,7 +58,7 @@ SELECT
       *,
       MAX(uuid_ts) OVER (PARTITION BY ${uniqueColumn} ORDER BY uuid_ts RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS max_uuid_ts
     FROM
-      ${ctx.ref({ database: params.defaultConfig.databaseName, schema: params.defaultConfig.schemaName, name: `${tableName}` })}
+      ${ctx.ref({ database: params.sourceDatabaseName, schema: params.sourceSchemaName, name: `${tableName}` })}
   )
 WHERE
 uuid_ts = max_uuid_ts
@@ -93,68 +101,10 @@ module.exports = {
   filterSegment,
   safeDivide,
   castInt,
-  castFloat
+  castFloat,
+  splitPart,
+  getUrlHost,
+  getUrlParameter,
+  platform,
+  browser,
 };
-
-//
-//Common functions to handle different warehouses
-//
-
-// declare({
-//   schema: constants.DATASET,
-//   name: utils.tableName('Ad'),
-//   description: 'Ad meta information'
-// })
-// And within SQLX files ${ constants.DATASET } ”.
-
-// const project_id = "project_id";
-// const first_date = "'1970-01-01'";
-// module.exports = {
-//   project_id,
-//   first_date
-// };
-
-
-// function timestampDiff(date_part, start_timestamp, end_timestamp, warehouse) {
-//   return ({
-//     bigquery: `timestamp_diff(${end_timestamp}, ${start_timestamp}, ${date_part})`,
-//     redshift: `datediff(${date_part}, ${start_timestamp}, ${end_timestamp})`,
-//     postgres: {
-//       day: `date_part('day', ${end_timestamp} - ${start_timestamp})`,
-//       hour: `24 * date_part('day', ${end_timestamp} - ${start_timestamp}) + date_part('hour', ${end_timestamp} - ${start_timestamp})`,
-//       minute: `24 * date_part('day', ${end_timestamp} - ${start_timestamp}) + 60 * date_part('hour', ${end_timestamp} - ${start_timestamp}) + date_part('minute', ${end_timestamp} - ${start_timestamp})`,
-//       second: `24 * date_part('day', ${end_timestamp} - ${start_timestamp}) + 60 * date_part('hour', ${end_timestamp} - ${start_timestamp}) + 60 * date_part('minute', ${end_timestamp} - ${start_timestamp}) + date_part('second', ${end_timestamp} - ${start_timestamp})`,
-//       millisecond: `24 * date_part('day', ${end_timestamp} - ${start_timestamp}) + 60 * date_part('hour', ${end_timestamp} - ${start_timestamp}) + 60 * date_part('minute', ${end_timestamp} - ${start_timestamp}) + 1000 * date_part('second', ${end_timestamp} - ${start_timestamp}) + date_part('millisecond', ${end_timestamp} - ${start_timestamp})`
-//     }[date_part.toLowerCase()],
-//     snowflake: `datediff(${date_part}, ${start_timestamp}, ${end_timestamp})`,
-//     sqldatawarehouse: `datediff(${date_part}, ${start_timestamp}, ${end_timestamp})`
-//   })[warehouse || dataform.projectConfig.warehouse];
-// // };
-
-// function generateSurrogateKey(id_array, warehouse) {
-//   return ({
-//     bigquery: `cast(farm_fingerprint(concat(${id_array.map((id) => (`cast(${id} as ${typeString()})`)).join(`,`)})) as ${typeString()})`,
-//     redshift: `md5(concat(${id_array.map((id) => (`cast(${id} as ${typeString()})`)).join(`,`)}))`,
-//     postgres: `md5(concat(${id_array.map((id) => (`cast(${id} as ${typeString()})`)).join(`,`)}))`,
-//     snowflake: `md5(concat(${id_array.map((id) => (`cast(${id} as ${typeString()})`)).join(`,`)}))`,
-//     sqldatawarehouse: `hashbytes("md5", (concat(${id_array.map((id) => (`cast(${id} as ${typeString()})`)).join(`,`)})))`,
-//   })[warehouse || dataform.projectConfig.warehouse];
-// };
-
-// function windowFunction({
-//   func,
-//   value,
-//   ignore_nulls,
-//   partition_fields,
-//   order_fields,
-//   frame_clause,
-//   warehouse
-// }) {
-//   return ({
-//     bigquery: `${func}(${value} ${ignore_nulls ? `ignore nulls` : ``}) over (partition by ${partition_fields} order by ${order_fields} ${frame_clause ? frame_clause : ``})`,
-//     redshift: `${func}(${value} ${ignore_nulls ? `ignore nulls` : ``}) over (partition by ${partition_fields} order by ${order_fields} ${frame_clause ? frame_clause : `rows between unbounded preceding and unbounded following`})`,
-//     postgres: `${func}(${value}) over (partition by ${partition_fields} order by ${ignore_nulls ? `case when ${value} is not null then 0 else 1 end asc` : ``} ${order_fields && ignore_nulls ? `,` : ``} ${order_fields} ${frame_clause ? frame_clause : `rows between unbounded preceding and unbounded following`})`,
-//     snowflake: `${func}(${value} ${ignore_nulls ? `ignore nulls` : ``}) over (partition by ${partition_fields} order by ${order_fields} ${frame_clause ? frame_clause : ``})`,
-//     sqldatawarehouse: `${func}(${value} ${ignore_nulls ? `ignore nulls` : ``}) over (partition by ${partition_fields} order by ${order_fields} ${frame_clause ? frame_clause : ``})`,
-//   })[warehouse || dataform.projectConfig.warehouse];
-// };

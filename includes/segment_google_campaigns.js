@@ -1,15 +1,14 @@
 const crossDB = require("./crossDB");
-const sql = require("@dataform/sql")();
 
 const tableName = `campaigns`
 
 module.exports = (params) => {
 
-    return publish(params.stagingTablePrefix + "google_campaigns", {
+    return publish(params.stagingTablePrefix + "segment_google_campaigns", {
         ...params.defaultConfig
     }).query(ctx => `
 with source as (
-${crossDB.filterSegment(ctx, params, tableName, `id`)} )
+    ${crossDB.filterSegment(ctx, params, tableName, `id`)} )
 SELECT
     cast(id as string) as ad_campaign_id,
     cast(adwords_customer_id as string) as ad_account_id,

@@ -1,0 +1,5 @@
+.DS-Store
+.vs_code/
+node_modules/
+.df-credentials.json
+package-lock.json
