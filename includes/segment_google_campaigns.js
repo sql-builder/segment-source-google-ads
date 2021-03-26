@@ -4,7 +4,7 @@ const tableName = `campaigns`
 
 module.exports = (params) => {
 
-    return publish(params.stagingTablePrefix + "segment_google_campaigns", {
+    return publish(params.stagingTablePrefix + "segment_google_ad_campaigns", {
         ...params.defaultConfig
     }).query(ctx => `
 with source as (
