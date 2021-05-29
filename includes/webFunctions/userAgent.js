@@ -1,7 +1,7 @@
 // source: https://discourse.looker.com/t/parsing-user-agent-into-device-type-manufacturer-browser/1206/2
 
 function platformStart(user_agent) {
-    return `STRPOS(${user_agent}, '(') + 1`;
+    return `POSITION('(',${user_agent}) + 1`;
 }
 
 function platformRaw(user_agent) {
@@ -11,9 +11,9 @@ function platformRaw(user_agent) {
 function platformEndInitial(user_agent) {
     return `
     CASE
-      WHEN STRPOS(${platformRaw(user_agent)}, ';') = 0
-      THEN STRPOS(${platformRaw(user_agent)}, ')')
-      ELSE STRPOS(${platformRaw(user_agent)}, ';')
+      WHEN POSITION(';',${platformRaw(user_agent)}) = 0
+      THEN POSITION(')',${platformRaw(user_agent)})
+      ELSE POSITION(';',${platformRaw(user_agent)})
     END`;
 }
 
@@ -23,7 +23,31 @@ CASE WHEN ${platformEndInitial(user_agent)} = 0 THEN 0 ELSE ${platformEndInitial
 }
 
 function platform(user_agent) {
-    return `SUBSTR(${user_agent}, ${platformStart(user_agent)}, ${platformEnd(user_agent)})`;
+    return `
+    CASE
+      WHEN SUBSTR(${user_agent}, ${platformStart(user_agent)}, ${platformEnd(user_agent)}) = 'Linux' then 'Android'
+      WHEN SUBSTR(${user_agent}, ${platformStart(user_agent)}, ${platformEnd(user_agent)}) = 'Macintosh' then 'Mac'
+      ELSE SUBSTR(${user_agent}, ${platformStart(user_agent)}, ${platformEnd(user_agent)})
+    END
+    `;
+}
+
+function platform_category(platform) {
+    return `
+    CASE
+      WHEN lower(${platform}) LIKE '%ipad%' THEN 'ipad'
+      WHEN lower(${platform}) LIKE '%iphone%' THEN 'iphone'
+      WHEN lower(${platform}) LIKE '%windows%' THEN 'windows'
+      WHEN lower(${platform}) LIKE '%mac%' THEN 'mac'
+      WHEN lower(${platform}) LIKE '%android%' THEN 'android'
+      WHEN lower(${platform}) LIKE '%linux%' THEN 'android'
+      WHEN lower(${platform}) LIKE '%x11%' THEN 'android'
+      WHEN lower(${platform}) LIKE '%brew%' THEN 'android'
+      WHEN lower(${platform}) LIKE '%playstation%' THEN 'playstation'
+      WHEN lower(${platform}) LIKE '%nintendo%' THEN 'nintendo'
+      WHEN lower(${platform}) LIKE '%bb10%' THEN 'blackberry'
+      ELSE lower(${platform})
+    END`;
 }
 
 function browser(user_agent) {
@@ -47,11 +71,12 @@ function browser(user_agent) {
       WHEN ${user_agent} LIKE '%Wget%' THEN 'Bot'
       WHEN ${user_agent} LIKE '%curl%' THEN 'Bot'
       WHEN ${user_agent} LIKE '%urllib%' THEN 'Bot'
-      ELSE 'Unknown'
+      ELSE ${user_agent}
     END`;
 }
 
 module.exports = {
     platform,
+    platform_category,
     browser
 }
