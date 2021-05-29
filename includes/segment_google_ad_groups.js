@@ -29,22 +29,6 @@ FROM source
 `)
 }
 
-// with source as (
-//     {{ filter_segment_relation(var('stg_google_ads_segment_ad_groups_table')) }}
-// ),
-// renamed as (
-//     SELECT cast(id as string) as ad_group_id,
-//         name as ad_group_name,
-//         status as ad_group_status,
-//         cast(campaign_id as string) ad_campaign_id,
-//             'Google Ads' as ad_network
-// FROM source )
-// {% endif %}
-// select
-//     *
-//     from
-// renamed
-
 // Ad Groups
 // PROPERTY NAME	DESCRIPTION
 // adwords_customer_id	The 10 - digit Google Ads Customer ID.
