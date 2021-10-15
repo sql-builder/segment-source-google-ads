@@ -37,15 +37,6 @@ FROM source
 `)
 }
 
-splitPart(string_text, delimiter_text, part_number, warehouse) 
-
-select distinct report.ad_id,CAST(SPLIT(report.ad_id,'::')[1] AS INTEGER), ads.ad_id
-from "CORE"."SEGMENT_GOOGLE_ADS_SOURCE"."STG_SEGMENT_GOOGLE_AD_PERFORMANCE" as report
-left join "CORE"."SEGMENT_GOOGLE_ADS_SOURCE"."STG_SEGMENT_GOOGLE_ADS" as ads
-on SPLIT(report.ad_id,'::')[2]::INTEGER = ads.ad_id::INTEGER
-;
-
-
 // with source as (
 //     {{ filter_segment_relation(var('stg_google_ads_segment_ad_performance_table')) }}
 // ),
