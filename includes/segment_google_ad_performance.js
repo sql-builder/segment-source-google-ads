@@ -11,7 +11,7 @@ with source as (
     ${crossDB.filterSegment(ctx, params, tableName, `ad_id`)}
 )    
 SELECT
-    cast(ad_id as string) as ad_id,
+    cast(${crossDB.splitPart(ad_id,'::',2,global.dataform.projectConfig.warehouse)} as string) as ad_id,
     date_start as ad_serve_ts,
     ${crossDB.safeDivide(`cost`, `clicks`)} as ad_avg_cost,
     ${crossDB.castInt(null, global.dataform.projectConfig.warehouse)} as ad_total_frequency,
@@ -35,6 +35,15 @@ SELECT
 FROM source
 `)
 }
+
+splitPart(string_text, delimiter_text, part_number, warehouse) 
+
+select distinct report.ad_id,CAST(SPLIT(report.ad_id,'::')[1] AS INTEGER), ads.ad_id
+from "CORE"."SEGMENT_GOOGLE_ADS_SOURCE"."STG_SEGMENT_GOOGLE_AD_PERFORMANCE" as report
+left join "CORE"."SEGMENT_GOOGLE_ADS_SOURCE"."STG_SEGMENT_GOOGLE_ADS" as ads
+on SPLIT(report.ad_id,'::')[2]::INTEGER = ads.ad_id::INTEGER
+;
+
 
 // with source as (
 //     {{ filter_segment_relation(var('stg_google_ads_segment_ad_performance_table')) }}
