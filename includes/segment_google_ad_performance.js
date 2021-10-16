@@ -11,8 +11,8 @@ with source as (
     ${crossDB.filterSegment(ctx, params, tableName, `ad_id`)}
 )    
 SELECT
-    cast(${crossDB.splitPart(ad_id,'::',2,global.dataform.projectConfig.warehouse)} as string) as ad_id,
-    cast(${crossDB.splitPart(ad_id,'::',1,global.dataform.projectConfig.warehouse)} as string) as ad_campaign_id,
+    cast(${crossDB.splitPart(`ad_id`,`'::'`,2,global.dataform.projectConfig.warehouse)} as string) as ad_id,
+    cast(${crossDB.splitPart(`ad_id`,`'::'`,1,global.dataform.projectConfig.warehouse)} as string) as ad_campaign_id,
     date_start as ad_serve_ts,
     ${crossDB.safeDivide(`cost`, `clicks`)} as ad_avg_cost,
     ${crossDB.castInt(null, global.dataform.projectConfig.warehouse)} as ad_total_frequency,
