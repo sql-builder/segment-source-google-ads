@@ -16,7 +16,7 @@ SELECT
     cast(adwords_customer_id as string) as ad_account_id,
     cast(null as string) as ad_name,
     status as ad_status,
-    cast(ad_group_id as string) as ad_group_id,
+    cast(source.ad_group_id as string) as ad_group_id,
     cast(null as string) as ad_bid_type,
     ${crossDB.castFloat(null, global.dataform.projectConfig.warehouse)} as ad_bid_amount,
     cast(null as string) as ad_utm_parameters,
@@ -35,7 +35,7 @@ SELECT
     'Segment' as source_name
 FROM source
 LEFT JOIN ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "segment_google_ad_groups")} as adgroups
-on ads.ad_group_id = adgroups.ad_group_id
+on source.ad_group_id = adgroups.ad_group_id
 `)
 }
 
