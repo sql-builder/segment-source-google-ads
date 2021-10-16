@@ -12,7 +12,7 @@ with source as (
 )
 SELECT
     cast(original_id as string) as ad_id,
-    campaign.ad_campaign_id as ad_campaign_id,
+    adgroups.ad_campaign_id as ad_campaign_id,
     cast(adwords_customer_id as string) as ad_account_id,
     cast(null as string) as ad_name,
     status as ad_status,
@@ -34,7 +34,8 @@ SELECT
     current_timestamp() as updated_on,
     'Segment' as source_name
 FROM source
-LEFT JOIN ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "segment_google_ad_campaigns")} as campaign
+LEFT JOIN ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "segment_google_ad_groups")} as adgroups
+on ads.ad_group_id = adgroups.ad_group_id
 `)
 }
 
