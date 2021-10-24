@@ -7,9 +7,6 @@ module.exports = (params) => {
     return publish(params.stagingTablePrefix + "segment_google_ads", {
         ...params.defaultConfig
     }).query(ctx => `
-with source as ( 
-    ${crossDB.filterSegment(ctx, params, tableName, `id`)}
-)
 SELECT
     cast(original_id as string) as ad_id,
     adgroups.ad_campaign_id as ad_campaign_id,
@@ -33,22 +30,8 @@ SELECT
     uuid_ts as row_loaded_on,
     current_timestamp() as updated_on,
     'Segment' as source_name
-FROM source
+FROM ${ctx.ref({ database: params.sourceDatabaseName, schema: params.sourceSchemaName, name: `${tableName}` })} as source
 LEFT JOIN ${ctx.ref(params.defaultConfig.schema, params.stagingTablePrefix + "segment_google_ad_groups")} as adgroups
 on source.ad_group_id = adgroups.ad_group_id
 `)
 }
-
-
-// Ads
-// PROPERTY NAME	DESCRIPTION
-// ad_group_id	The id of the adgroup containing this ad.
-// id   The ad_group_id:ad_id.
-// original_id The original ad_id.
-// adwords_customer_id	The 10 - digit Google Ads Customer ID.
-// final_mobile_urls	A list of final mobile landing page urls.
-// final_urls	A list of final landing page urls.
-// received_at	This timestamp is added to incoming messages as soon as they hit Segment API.
-// status	The status of the ad.
-// type The type of this ad.
-// url	Unique identifier for this instance of UrlData.
