@@ -1,11 +1,12 @@
 ## Dataform Google Ads (Source) ## 
 This package models Google Ads data from the Segment connector using the Dataform data modeling layer.
 
+```
 **Test on:**
-    **Snowflake: Tested**
-    **BigQuery: Un-tested**
-    **Redshift: Un-tested**
-
+Snowflake: Tested
+BigQuery: Un-tested
+Redshift: Un-tested
+```
 
 # Includes
 Include in your _package.json_ project file.
