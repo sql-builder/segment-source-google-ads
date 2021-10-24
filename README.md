@@ -39,6 +39,7 @@ google({
 ```
 
 ```
+The following variables are used to define the tables the model is built on and where the resulting sourse model is built to. This source model is setup to be easily integrated into an marketing integration model reguardless of what data ingestion/piping layer you chose.
 Vars:
     sourceDatabaseName: Name of database where Segment is loading data,
     sourceSchemaName  : Name of schema where Segment is loading data,
