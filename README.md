@@ -47,9 +47,9 @@ Vars:
 ```
     
 # Destination Table Schema
+```
 Name: _segment_google_ad_groups_
 Fields:
-```
     ad_group_id,
     ad_campaign_id,
     ad_account_id,
@@ -66,9 +66,9 @@ Fields:
     source_name
 ```
 
+```
 Name: _segment_google_ad_performance_
 Fields:
-```
     ad_id,
     ad_campaign_id,
     ad_serve_ts,
@@ -92,10 +92,10 @@ Fields:
     updated_on,
     source_name
 ```
-    
+
+```
 Name: _segment_google_ads_
 Fields:
-```
     ad_id,
     ad_campaign_id,
     ad_account_id,
@@ -120,9 +120,9 @@ Fields:
     source_name
 ```
 
+```
 Name: _segment_google_ads_
 Fields:
-```
     ad_campaign_id,
     ad_account_id,
     ad_campaign_name,
