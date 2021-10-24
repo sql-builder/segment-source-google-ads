@@ -34,98 +34,107 @@ google({
 });
 ```
 
+```
 Vars:
-        sourceDatabaseName: Name of database where Segment is loading data,
-        sourceSchemaName  : Name of schema where Segment is loading data,
-        stagingTablePrefix: Prefix string for each table created [OPTIONAL],
+    sourceDatabaseName: Name of database where Segment is loading data,
+    sourceSchemaName  : Name of schema where Segment is loading data,
+    stagingTablePrefix: Prefix string for each table created [OPTIONAL],
 
-        database: Name of destination database to build source tables too, 
-        schema  : Name of destination schema to build source tables too,
-        tags    : Dataform Tags for controlling scheduled runs,
-        type    : Destination tables type [view,table]
-    
+    database: Name of destination database to build source tables too, 
+    schema  : Name of destination schema to build source tables too,
+    tags    : Dataform Tags for controlling scheduled runs,
+    type    : Destination tables type [view,table]
+```
     
 # Destination Table Schema
 Name: _segment_google_ad_groups_
 Fields:
-        ad_group_id,
-        ad_campaign_id,
-        ad_account_id,
-        ad_group_name,
-        ad_group_targeting,
-        ad_group_status,
-        ad_group_create_ts,
-        ad_group_start_date,
-        ad_group_end_date,
-        ad_group_budget,
-        ad_network,
-        row_loaded_on,
-        updated_on,
-        source_name
+```
+    ad_group_id,
+    ad_campaign_id,
+    ad_account_id,
+    ad_group_name,
+    ad_group_targeting,
+    ad_group_status,
+    ad_group_create_ts,
+    ad_group_start_date,
+    ad_group_end_date,
+    ad_group_budget,
+    ad_network,
+    row_loaded_on,
+    updated_on,
+    source_name
+```
 
 Name: _segment_google_ad_performance_
 Fields:
-        ad_id,
-        ad_campaign_id,
-        ad_serve_ts,
-        ad_avg_cost,
-        ad_total_frequency,
-        ad_total_clicks,
-        ad_total_link_clicks,
-        ad_total_impressions,
-        ad_total_reach,
-        ad_total_unique_clicks,
-        ad_total_unique_impressions,
-        ad_total_inline_post_engagements,
-        ad_total_cost,
-        ad_total_social_cost,
-        ad_avg_time_on_site,
-        ad_bounce_rate,
-        ad_total_assisted_conversions,
-        ad_total_conversion_value,
-        ad_network,
-        row_loaded_on,
-        updated_on,
-        source_name
+```
+    ad_id,
+    ad_campaign_id,
+    ad_serve_ts,
+    ad_avg_cost,
+    ad_total_frequency,
+    ad_total_clicks,
+    ad_total_link_clicks,
+    ad_total_impressions,
+    ad_total_reach,
+    ad_total_unique_clicks,
+    ad_total_unique_impressions,
+    ad_total_inline_post_engagements,
+    ad_total_cost,
+    ad_total_social_cost,
+    ad_avg_time_on_site,
+    ad_bounce_rate,
+    ad_total_assisted_conversions,
+    ad_total_conversion_value,
+    ad_network,
+    row_loaded_on,
+    updated_on,
+    source_name
+```
     
 Name: _segment_google_ads_
 Fields:
-        ad_id,
-        ad_campaign_id,
-        ad_account_id,
-        ad_name,
-        ad_status,
-        ad_group_id,
-        ad_bid_type,
-        ad_bid_amount,
-        ad_utm_parameters,
-        ad_utm_campaign,
-        ad_utm_content,
-        ad_utm_medium,
-        ad_utm_source,
-        ad_utm_term,
-        ad_type,
-        ad_final_urls,
-        ad_network_type,
-        ad_criteria_type,
-        ad_network,
-        row_loaded_on,
-        updated_on,
-        source_name
+```
+    ad_id,
+    ad_campaign_id,
+    ad_account_id,
+    ad_name,
+    ad_status,
+    ad_group_id,
+    ad_bid_type,
+    ad_bid_amount,
+    ad_utm_parameters,
+    ad_utm_campaign,
+    ad_utm_content,
+    ad_utm_medium,
+    ad_utm_source,
+    ad_utm_term,
+    ad_type,
+    ad_final_urls,
+    ad_network_type,
+    ad_criteria_type,
+    ad_network,
+    row_loaded_on,
+    updated_on,
+    source_name
+```
 
 Name: _segment_google_ads_
 Fields:
-        ad_campaign_id,
-        ad_account_id,
-        ad_campaign_name,
-        ad_campaign_buying_type,
-        ad_campaign_status,
-        ad_campaign_end_date,
-        ad_campaign_start_date,
-        ad_network,
-        row_loaded_on,
-        updated_on,
-        source_name
+```
+    ad_campaign_id,
+    ad_account_id,
+    ad_campaign_name,
+    ad_campaign_buying_type,
+    ad_campaign_status,
+    ad_campaign_end_date,
+    ad_campaign_start_date,
+    ad_network,
+    row_loaded_on,
+    updated_on,
+    source_name
+```
     
     
 # Contributions
