@@ -1,17 +1,21 @@
-## Google Ads (Source) ## 
-This package models Google Ads data from the Segment connector.
+## Dataform Google Ads (Source) ## 
+This package models Google Ads data from the Segment connector using the Dataform data modeling layer.
 
-**Includes**
+**Test on:**
+  **Snowflake: Tested**
+  **BigQuery: Un-tested**
+  **Redshift: Un-tested**
+
+
+# Includes
 Include in your _package.json_ project file.
 
-Packages:
-  - Package Name: _segment-sources/google-ads_
+Packages: "segment-google-ads": "https://github.com/sql-builder/segment-source-google-ads.git"
   
 # Configuration
+The source model is built by placing the following javascript file into your definitions folder.
 
 segment-google-ads-source.js
-
-...
 ```javascript
 const google = require("segment-sources/google-ads");
 
