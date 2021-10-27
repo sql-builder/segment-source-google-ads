@@ -1,4 +1,4 @@
-## Dataform Google Ads (Source) ## 
+## Dataform Segment Google Ads (Source) ## 
 This package models Google Ads data from the Segment connector using the Dataform data modeling layer.
 
 ```
