@@ -127,7 +127,7 @@ Fields:
 ```
 
 ```
-Name: _segment_google_ads_
+Name: _segment_google_campaigns_
 Fields:
     ad_campaign_id,
     ad_account_id,
@@ -142,6 +142,33 @@ Fields:
     source_name
 ```
     
+```
+Name: _segment_google_campaign_performance_
+Fields:
+    ad_campaign_id,
+    ad_serve_ts,
+    ad_avg_cost,
+    ad_campaign_status,
+    ad_total_frequency,
+    ad_total_clicks,
+    ad_total_link_clicks,
+    ad_total_impressions,
+    ad_total_reach,
+    ad_total_unique_clicks,
+    ad_total_unique_impressions,
+    ad_total_inline_post_engagements,
+    ad_total_cost,
+    ad_total_social_cost,
+    ad_avg_time_on_site,
+    ad_bounce_rate,
+    ad_total_conversions,
+    ad_total_conversion_value,
+    ad_total_conversion_rate,
+    ad_network,
+    row_loaded_on,
+    updated_on,
+    source_name
+```
     
 # Contributions
 Additional contributions to this package are very welcome! Please create issues or open PRs against master. Check out this post on the best workflow for contributing to a package.
